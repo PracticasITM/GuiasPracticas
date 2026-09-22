@@ -51,6 +51,22 @@
   }
   .btn-pdf:hover { background: #0b2050; }
 
+     /* ── Botón Enviar a Power Automate ── */
+  .btn-enviar {
+    display: block;
+    width: 216mm;
+    margin: 0 auto 10mm;
+    padding: 9px 0;
+    background: #1e7e34; /* Verde */
+    color: #fff;
+    font-size: 12pt;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+  }
+  .btn-enviar:hover { background: #155724; }
   /* ── Wrapper para esquinas redondeadas de tablas ── */
   /* ── Sin redondeo en encabezado ── */
   .page > .tw:first-child { border-radius: 0; }
@@ -252,6 +268,8 @@
 
     /* Mantener márgenes en saltos de página */
     @page { margin: 10mm 12mm; }
+
+ 
   }
 </style>
 </head>
@@ -271,8 +289,8 @@
       </td>
       <td rowspan="1" id="enc-cod">
         <p><strong>Código:</strong> <span style="color:var(--negro);font-weight:normal;">FDE 074</span></p>
-        <p><strong>Versión:</strong> <span style="color:var(--negro);font-weight:normal;">01</span></p>
-        <p><strong>Fecha:</strong> <span style="color:var(--negro);font-weight:normal;">00-00-2026</span></p>
+        <p><strong>Versión:</strong> <span style="color:var(--negro);font-weight:normal;"></span></p>
+        <p><strong>Fecha:</strong> <span style="color:var(--negro);font-weight:normal;"></span></p>
       </td>
     </tr>
   </table>
@@ -284,7 +302,7 @@
   <p style="font-size:9pt;padding:6px 4px;line-height:1.5;margin-bottom:3px;text-align:justify;">
     La Guía N°1 – Visita de Inicio tiene como propósito verificar y registrar las condiciones iniciales en las que el practicante
     ingresa al escenario de práctica o empresa patrocinadora durante el primer mes de vinculación. Sirve además como instrumento
-    de formalización del Plan de Práctica exigido por el Decreto 0223 de 2026 y el Manual de Prácticas Profesionales ITM,
+    de formalización del Plan de Práctica exigido por el Decreto 0223 de 2026 y la Política de Prácticas Profesionales ITM,
     garantizando la articulación tripartita entre el practicante, el Tutor y el Monitor.
   </p>
 
@@ -297,11 +315,11 @@
     <tr><td class="lbl">Nombre completo:</td>
         <td class="input-cell"><input type="text" id="inp-nombre-pract" placeholder="Escribir nombre completo" oninput="sincronizarFirmas()"></td></tr>
     <tr><td class="lbl">Número de identificación:</td>
-        <td class="input-cell alt"><input type="text" placeholder="Número de cédula / tarjeta de identidad"></td></tr>
+        <td class="input-cell alt"><input type="text" id="inp-documento" placeholder="Número de cédula / tarjeta de identidad"></td></tr>
     <tr><td class="lbl">Correo electrónico institucional:</td>
-        <td class="input-cell"><input type="text" placeholder="correo@itm.edu.co"></td></tr>
+        <td class="input-cell"><input type="text" id="inp-correo" placeholder="correo@itm.edu.co"></td></tr>
     <tr><td class="lbl">Teléfono de contacto:</td>
-        <td class="input-cell alt"><input type="text" placeholder="Número de teléfono"></td></tr>
+        <td class="input-cell alt"><input type="text" id="inp-telefono" placeholder="Número de teléfono"></td></tr>
     <tr><td class="lbl">Facultad:</td>
         <td class="input-cell">
           <select id="sel-facultad" onchange="filtrarProgramas()" style="width:100%;border:none;background:transparent;font-family:Arial,sans-serif;font-size:9pt;color:var(--negro);outline:none;cursor:pointer;">
@@ -324,6 +342,7 @@
             <option value="">-- Seleccione monitor --</option>
             <option>Adriana Maria Zapata Cano</option>
             <option>Alberto Alexander Fonnegra Montoya</option>
+            <option>Alicia Magnolia Vasquez Franco</option>
             <option>Angie Paola Meneses Calderon</option>
             <option>Carmen Elisa Escobar Agudelo</option>
             <option>Carmen Liliana Barragan Guevara</option>
@@ -345,11 +364,12 @@
             <option>Natalia Eugenia Fonnegra Gomez</option>
             <option>Norida Astrid Valencia Bustamante</option>
             <option>Robert NG Henao</option>
+            <option>Yanneth Del Socorro Lopez</option>
           </select>
         </td></tr>
     <tr><td class="lbl">Fecha de inicio de la práctica:</td>
         <td class="input-cell alt"><input type="date" id="fecha-inicio" onchange="ajustarFechaFin()"></td></tr>
-    <tr><td class="lbl">Fecha de finalización de la práctica:</td>
+    <tr><td class="lbl">Fecha estimada de finalización:</td>
         <td class="input-cell">
           <input type="date" id="fecha-fin">
           <span id="hint-fin" style="font-size:7.5pt;color:var(--azul);font-style:italic;margin-left:6px;"></span>
@@ -359,8 +379,6 @@
           <label class="chk"><input type="checkbox"> Prácticas profesionales</label>
           <label class="chk"><input type="checkbox"> Prácticas sociales</label>
           <label class="chk"><input type="checkbox"> Prácticas internacionales</label>
-          <label class="chk"><input type="checkbox"> Otro, ¿cuál?</label>
-          <input type="text" style="display:inline-block;width:180px;border-bottom:1px solid var(--gris-m);margin-left:4px;">
         </td></tr>
   </table>
 
@@ -374,10 +392,13 @@
         <td class="input-cell"><input type="text"></td></tr>
     <tr><td class="lbl">NIT / Documento de identificación:</td>
         <td class="input-cell alt"><input type="text"></td></tr>
-    <tr><td class="lbl">Tipo de contrato:</td>
-        <td class="input-cell" style="padding:4px 7px;">
-          <label class="chk"><input type="checkbox"> Contrato de aprendizaje</label>
-          <label class="chk"><input type="checkbox"> Contrato Vinculación formativa</label>
+    <tr><td class="lbl">Tipo de escenario:</td>
+        <td class="input-cell">
+          <select style="width:100%;border:none;background:transparent;font-family:Arial,sans-serif;font-size:9pt;color:var(--negro);outline:none;cursor:pointer;">
+            <option value="">-- Seleccione tipo --</option>
+            <option>Empresa patrocinadora (Contrato aprendizaje)</option>
+            <option>Escenario de práctica laboral (Vinc. Formativa)</option>
+          </select>
         </td></tr>
     <tr><td class="lbl">Sector económico:</td>
         <td class="input-cell alt">
@@ -439,9 +460,15 @@
             <option>Otro sector</option>
           </select>
         </td></tr>
+    <tr><td class="lbl">Dirección / Ciudad:</td>
+        <td class="input-cell"><input type="text"></td></tr>
     <tr><td class="lbl">Nombre del Tutor designado:</td>
         <td class="input-cell"><input type="text" id="inp-nombre-tutor" oninput="sincronizarFirmas()"></td></tr>
     <tr><td class="lbl">Cargo del Tutor:</td>
+        <td class="input-cell alt"><input type="text"></td></tr>
+    <tr><td class="lbl">Correo electrónico del Tutor:</td>
+        <td class="input-cell"><input type="text" placeholder="correo@empresa.com"></td></tr>
+    <tr><td class="lbl">Teléfono del Tutor:</td>
         <td class="input-cell alt"><input type="text"></td></tr>
     <tr><td class="lbl">Área en la que el practicante ejecuta sus funciones:</td>
         <td class="input-cell"><input type="text"></td></tr>
@@ -458,22 +485,7 @@
       <td class="col-hdr">Verificado</td>
     </tr>
     <tr>
-      <td class="input-cell">Contrato Firmado</td>
-      <td class="input-cell" style="text-align:center;padding:3px 2px;">
-        <label class="chk"><input type="checkbox"> Sí</label>
-        <label class="chk"><input type="checkbox"> No</label>
-      </td>
-    </tr>
-    <tr>
-      <td class="input-cell alt">Afiliación EPS</td>
-      <td class="input-cell alt" style="text-align:center;padding:3px 2px;">
-        <label class="chk"><input type="checkbox"> Sí</label>
-        <label class="chk"><input type="checkbox"> No</label>
-        <label class="chk"><input type="checkbox"> N/A</label>
-      </td>
-    </tr>
-    <tr>
-      <td class="input-cell">Afiliación ARL</td>
+      <td class="input-cell">Contrato de aprendizaje / Contrato de vinculación formativa</td>
       <td class="input-cell" style="text-align:center;padding:3px 2px;">
         <label class="chk"><input type="checkbox"> Sí</label>
         <label class="chk"><input type="checkbox"> No</label>
@@ -481,7 +493,7 @@
       </td>
     </tr>
     <tr>
-      <td class="input-cell alt">Afiliación Fondo de Pensiones</td>
+      <td class="input-cell alt">Afiliación a ARL — obligatoria (Art. 2.2.6.3.2.9 y 2.2.6.3.3.7 Decreto 0223/2026)</td>
       <td class="input-cell alt" style="text-align:center;padding:3px 2px;">
         <label class="chk"><input type="checkbox"> Sí</label>
         <label class="chk"><input type="checkbox"> No</label>
@@ -489,7 +501,7 @@
       </td>
     </tr>
     <tr>
-      <td class="input-cell">Afiliación a caja de compensación Familiar</td>
+      <td class="input-cell">Afiliación a EPS (Salud)</td>
       <td class="input-cell" style="text-align:center;padding:3px 2px;">
         <label class="chk"><input type="checkbox"> Sí</label>
         <label class="chk"><input type="checkbox"> No</label>
@@ -497,7 +509,7 @@
       </td>
     </tr>
     <tr>
-      <td class="input-cell alt">Carta de inicio emitida por la Oficina de Prácticas Profesionales ITM</td>
+      <td class="input-cell alt">Afiliación a Fondo de Pensión (solo fase práctica contrato aprendizaje)</td>
       <td class="input-cell alt" style="text-align:center;padding:3px 2px;">
         <label class="chk"><input type="checkbox"> Sí</label>
         <label class="chk"><input type="checkbox"> No</label>
@@ -505,7 +517,23 @@
       </td>
     </tr>
     <tr>
-      <td class="input-cell">Autorización del Inspector de Trabajo (solo si el practicante tiene 15–17 años — Art. 2.2.6.3.1.4 del Decreto 0223 de 2026)</td>
+      <td class="input-cell">Carta de inicio emitida por la Oficina de Prácticas Profesionales ITM</td>
+      <td class="input-cell" style="text-align:center;padding:3px 2px;">
+        <label class="chk"><input type="checkbox"> Sí</label>
+        <label class="chk"><input type="checkbox"> No</label>
+        <label class="chk"><input type="checkbox"> N/A</label>
+      </td>
+    </tr>
+    <tr>
+      <td class="input-cell alt">Reglamento interno de trabajo entregado al aprendiz (contrato aprendizaje)</td>
+      <td class="input-cell alt" style="text-align:center;padding:3px 2px;">
+        <label class="chk"><input type="checkbox"> Sí</label>
+        <label class="chk"><input type="checkbox"> No</label>
+        <label class="chk"><input type="checkbox"> N/A</label>
+      </td>
+    </tr>
+    <tr>
+      <td class="input-cell">Autorización Inspector de Trabajo (solo si el practicante tiene 15–17 años — Art. 2.2.6.3.1.4)</td>
       <td class="input-cell" style="text-align:center;padding:3px 2px;">
         <label class="chk"><input type="checkbox"> Sí</label>
         <label class="chk"><input type="checkbox"> No</label>
@@ -525,25 +553,31 @@
       <td class="col-hdr">Estado</td>
     </tr>
     <tr>
+      <td class="input-cell">El practicante cuenta con espacio físico/virtual adecuado para realizar sus funciones</td>
+      <td class="input-cell" style="text-align:center;padding:3px 2px;">
+        <div class="chk-inline"><label class="chk"><input type="checkbox"> Cumple</label><label class="chk"><input type="checkbox"> No cumple</label></div>
+      </td>
+    </tr>
+    <tr>
       <td class="input-cell">Se realizó inducción institucional y de seguridad al ingreso</td>
       <td class="input-cell" style="text-align:center;padding:3px 2px;">
         <div class="chk-inline"><label class="chk"><input type="checkbox"> Cumple</label><label class="chk"><input type="checkbox"> No cumple</label></div>
       </td>
     </tr>
     <tr>
-      <td class="input-cell alt">El practicante conoce el reglamento y normas internas del escenario de práctica</td>
+      <td class="input-cell alt">El practicante conoce el reglamento y normas internas del escenario</td>
       <td class="input-cell alt" style="text-align:center;padding:3px 2px;">
         <div class="chk-inline"><label class="chk"><input type="checkbox"> Cumple</label><label class="chk"><input type="checkbox"> No cumple</label></div>
       </td>
     </tr>
     <tr>
-      <td class="input-cell">El horario no supera la jornada ordinaria del escenario de práctica, ni la máxima legal</td>
+      <td class="input-cell">El horario no supera la jornada ordinaria del escenario ni la máxima legal</td>
       <td class="input-cell" style="text-align:center;padding:3px 2px;">
         <div class="chk-inline"><label class="chk"><input type="checkbox"> Cumple</label><label class="chk"><input type="checkbox"> No cumple</label></div>
       </td>
     </tr>
     <tr>
-      <td class="input-cell alt">El Escenario de prácticas permite la asistencia a actividades académicas convocadas por la ITM</td>
+      <td class="input-cell alt">El horario permite la asistencia a actividades académicas convocadas por la ITM</td>
       <td class="input-cell alt" style="text-align:center;padding:3px 2px;">
         <div class="chk-inline"><label class="chk"><input type="checkbox"> Cumple</label><label class="chk"><input type="checkbox"> No cumple</label></div>
       </td>
@@ -555,20 +589,14 @@
       </td>
     </tr>
     <tr>
-      <td class="input-cell alt">¿Cuenta el escenario de práctica con un protocolo para la prevención del acoso sexual, en cumplimiento de la Ley 2365 de 2024?</td>
-      <td class="input-cell alt" style="text-align:center;padding:3px 2px;">
-        <div class="chk-inline"><label class="chk"><input type="checkbox"> Cumple</label><label class="chk"><input type="checkbox"> No cumple</label></div>
-      </td>
-    </tr>
-    <tr>
-      <td class="input-cell">¿Se socializó con el estudiante la política de acoso laboral?</td>
+      <td class="input-cell alt">¿Cuenta el escenario con un protocolo para la prevención del acoso sexual, en cumplimiento de la Ley 2365 de 2024?</td>
       <td class="input-cell" style="text-align:center;padding:3px 2px;">
         <div class="chk-inline"><label class="chk"><input type="checkbox"> Cumple</label><label class="chk"><input type="checkbox"> No cumple</label></div>
       </td>
     </tr>
     <tr>
-      <td class="input-cell alt">El practicante conoce los canales de atención ante situaciones de acoso u hostigamiento</td>
-      <td class="input-cell alt" style="text-align:center;padding:3px 2px;">
+      <td class="input-cell">¿Se socializó con el estudiante la política de Acoso Laboral?</td>
+      <td class="input-cell" style="text-align:center;padding:3px 2px;">
         <div class="chk-inline"><label class="chk"><input type="checkbox"> Cumple</label><label class="chk"><input type="checkbox"> No cumple</label></div>
       </td>
     </tr>
@@ -579,7 +607,7 @@
       </td>
     </tr>
     <tr>
-      <td class="input-cell alt">El practicante cuenta con espacio físico/virtual adecuado para realizar sus funciones</td>
+      <td class="input-cell alt">El practicante conoce los canales de atención ante situaciones de acoso u hostigamiento</td>
       <td class="input-cell alt" style="text-align:center;padding:3px 2px;">
         <div class="chk-inline"><label class="chk"><input type="checkbox"> Cumple</label><label class="chk"><input type="checkbox"> No cumple</label></div>
       </td>
@@ -588,19 +616,90 @@
 
   <div class="spacer"></div>
 
-  <!-- ═══ 6. PUESTO DE TRABAJO ═══════════════════════════════════ -->
-  <div class="sec-title"><span class="sec-num">6</span><span class="sec-text">PUESTO DE TRABAJO</span></div>
-  <p style="font-size:8.5pt;font-weight:bold;color:var(--azul);padding:4px 4px 2px;">
-    ¿Qué elementos o herramientas se le suministraron al estudiante/trabajador para el desarrollo de su actividad? <span style="font-weight:normal;font-size:8pt;">(Seleccione todas las que apliquen):</span>
-  </p>
+  <!-- ═══ 6. HORARIO DE PRÁCTICA ══════════════════════════════════ -->
+  <div class="sec-title"><span class="sec-num">6</span><span class="sec-text">HORARIO DE PRÁCTICA</span></div>
   <table>
+    <colgroup><col style="width:18%"><col style="width:30%"><col></colgroup>
     <tr>
-      <td class="input-cell" style="padding:5px 10px;">
+      <td class="hor-total">TOTAL SEMANAL</td>
+      <td class="input-cell" style="padding:4px 8px;">
+        <input type="number" min="1" max="48" style="width:60px;border-bottom:1px solid var(--gris-m);text-align:center;font-size:9pt;font-weight:bold;color:var(--azul);border-top:none;border-left:none;border-right:none;background:transparent;outline:none;" placeholder="0">
+        <span style="font-size:9pt;margin-left:4px;">horas por semana</span>
+      </td>
+      <td class="input-cell" style="padding:4px 8px;">
+        Compatible con actividades académicas ITM:&nbsp;
+        <label class="chk"><input type="checkbox"> Sí</label>
+        <label class="chk"><input type="checkbox"> No</label>
+      </td>
+    </tr>
+    <tr>
+      <td class="lbl">Modalidad de trabajo:</td>
+      <td class="input-cell alt" colspan="2" style="padding:4px 8px;">
+        <label class="chk"><input type="checkbox"> Presencial</label>
+        <label class="chk"><input type="checkbox"> Híbrida</label>
+        <label class="chk"><input type="checkbox"> Virtual</label>
+      </td>
+    </tr>
+  </table>
+
+  <table style="margin-top:4px;">
+    <colgroup><col style="width:22%"><col style="width:30%"><col></colgroup>
+    <tr>
+      <td class="col-hdr">Categoría</td>
+      <td class="col-hdr">Campo</td>
+      <td class="col-hdr">Detalle</td>
+    </tr>
+    <tr>
+      <td class="lbl" rowspan="2" style="text-align:center;">Jornada y horario</td>
+      <td class="lbl">Horario de trabajo:</td>
+      <td class="input-cell"><input type="text" placeholder="Ej. 8:00 a.m. – 12:00 m. / 2:00 p.m. – 6:00 p.m."></td>
+    </tr>
+    <tr>
+      <td class="lbl">Días laborales:</td>
+      <td class="input-cell alt"><input type="text" placeholder="Ej. Lunes a viernes"></td>
+    </tr>
+    <tr>
+      <td class="lbl" rowspan="3" style="text-align:center;">Ubicación del puesto</td>
+      <td class="lbl">Lugar de desarrollo de la práctica:</td>
+      <td class="input-cell" style="padding:4px 8px;">
+        <select id="sel-lugar-practica" onchange="toggleLugarOtro()" style="width:100%;border:none;background:transparent;font-family:Arial,sans-serif;font-size:9pt;color:var(--negro);outline:none;cursor:pointer;">
+          <option value="">-- Seleccione --</option>
+          <option>Oficina</option>
+          <option>Planta de producción</option>
+          <option>Laboratorio</option>
+          <option>Taller</option>
+          <option>Campo</option>
+          <option>Punto de atención</option>
+          <option>Bodega</option>
+          <option>Entorno clínico</option>
+          <option>Obra</option>
+          <option>Trabajo en sitio</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <input type="text" id="inp-lugar-otro" placeholder="Especifique el lugar..."
+               style="display:none;margin-top:4px;width:100%;border-bottom:1px solid var(--gris-m);font-size:9pt;">
+      </td>
+    </tr>
+    <tr>
+      <td class="lbl">Sede:</td>
+      <td class="input-cell alt"><input type="text" placeholder="Nombre de la sede"></td>
+    </tr>
+    <tr>
+      <td class="lbl">Ciudad:</td>
+      <td class="input-cell"><input type="text" placeholder="Ciudad"></td>
+    </tr>
+    <tr>
+      <td class="lbl" colspan="3" style="font-weight:bold;color:var(--azul);padding:6px 8px;">
+        ¿Qué elementos o herramientas se le suministraron al estudiante/trabajador para el desarrollo de su actividad? <span style="font-weight:normal;font-size:8pt;">(Seleccione todas las que apliquen):</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="input-cell" colspan="3" style="padding:5px 10px;">
         <div style="display:flex;flex-direction:column;gap:4px;">
           <label class="chk"><input type="checkbox"> Elementos de Protección Personal (EPP) según el riesgo (casco, gafas, guantes, botas, protectores auditivos, etc.).</label>
           <label class="chk"><input type="checkbox"> Equipos de cómputo y periféricos (computador, mouse, teclado, pantalla adicional).</label>
           <label class="chk"><input type="checkbox"> Dotación de calzado y vestido de labor (uniforme corporativo).</label>
-          <label class="chk"><input type="checkbox"> Elementos de ergonomía (silla ergonómica, pad mouse, reposa pies).</label>
+          <label class="chk"><input type="checkbox"> Elementos de ergonomía (silla ergonómica, pad mouse con gel, soporte para computador/pies).</label>
           <label class="chk"><input type="checkbox"> Herramientas o materiales específicos de la actividad (herramientas manuales, instrumentos de medición, insumos médicos, etc.).</label>
           <label class="chk"><input type="checkbox"> Carnet de identificación institucional / Tarjeta de acceso.</label>
         </div>
@@ -621,7 +720,7 @@
   <table>
     <colgroup><col style="width:50%"><col></colgroup>
     <tr>
-      <td class="col-hdr">DERECHOS DEL PRACTICANTE &nbsp;(Manual ITM Cap. VI | Decreto 0223/2026)</td>
+      <td class="col-hdr">DERECHOS DEL PRACTICANTE &nbsp;(Política ITM Cap. VI | Decreto 0223/2026)</td>
       <td class="col-hdr">DEBERES DEL PRACTICANTE &nbsp;(Art. 2.2.6.3.1.8 Decreto 0223/2026)</td>
     </tr>
     <tr>
@@ -659,18 +758,83 @@
   <!-- ═══ 8. OBSERVACIONES ═══════════════════════════════════════ -->
   <div class="sec-title"><span class="sec-num">8</span><span class="sec-text">OBSERVACIONES GENERALES DE LA VISITA DE INICIO</span></div>
 
-  <div class="obj-hdr" style="margin-top:4px;">Observaciones Monitor / Tutor:</div>
-  <div class="obj-body"><textarea style="width:100%;min-height:50px;" placeholder="Observaciones generales del Monitor y/o Tutor sobre el plan de trabajo..."></textarea></div>
-
-  <div class="ref-norm" style="margin-top:4px;">
-    <strong>Nota 1:</strong> Es de obligatorio cumplimiento la entrega de los resultados del plan de práctica mediante el informe de sistematización, documento que será entregado al estudiante junto con los demás documentos relacionados con el proceso de práctica.<br>
-    <strong>Nota 2:</strong> Si durante el desarrollo de la práctica se presentan dificultades, estas deberán ser informadas de manera oportuna al monitor de práctica a través de cualquiera de los medios de comunicación dispuestos para tal fin.
-  </div>
+  <div class="obj-hdr" style="margin-top:4px;">Observaciones:</div>
+  <div class="obj-body"><textarea style="width:100%;min-height:50px;" placeholder="Observaciones generales..."></textarea></div>
 
   <div class="spacer"></div>
 
-  <!-- ═══ 9. REGISTRO FOTOGRÁFICO ═══════════════════════════════════ -->
-  <div class="sec-title"><span class="sec-num">9</span><span class="sec-text">REGISTRO FOTOGRÁFICO DE LA VISITA</span></div>
+  <!-- ═══ 9. PLAN DE PRÁCTICAS ═════════════════════════════════════ -->
+  <div class="section-card">
+  <div class="sec-title"><span class="sec-num">9</span><span class="sec-text">PLAN DE PRÁCTICAS</span></div>
+
+  <div class="obj-hdr">Objetivos formativos acordados (Practicante · Tutor · Monitor):</div>
+  <div class="obj-body">
+    <textarea style="width:100%;min-height:50px;" placeholder="Escribir los objetivos formativos acordados..."></textarea>
+  </div>
+
+  <table style="margin-top:4px;">
+    <colgroup><col style="width:10%"><col><col><col></colgroup>
+    <tr>
+      <td class="col-hdr">Período</td>
+      <td class="col-hdr">Actividad Específica</td>
+      <td class="col-hdr">Competencia a Desarrollar</td>
+      <td class="col-hdr">Resultados Esperados</td>
+    </tr>
+    <tr>
+      <td class="lbl" style="text-align:center;">Mes 1</td>
+      <td class="input-cell"><textarea></textarea></td>
+      <td class="input-cell"><textarea></textarea></td>
+      <td class="input-cell"><textarea></textarea></td>
+    </tr>
+    <tr>
+      <td class="lbl" style="text-align:center;background:var(--gris-l);">Mes 2</td>
+      <td class="input-cell alt"><textarea></textarea></td>
+      <td class="input-cell alt"><textarea></textarea></td>
+      <td class="input-cell alt"><textarea></textarea></td>
+    </tr>
+    <tr>
+      <td class="lbl" style="text-align:center;">Mes 3</td>
+      <td class="input-cell"><textarea></textarea></td>
+      <td class="input-cell"><textarea></textarea></td>
+      <td class="input-cell"><textarea></textarea></td>
+    </tr>
+    <tr>
+      <td class="lbl" style="text-align:center;background:var(--gris-l);">Mes 4</td>
+      <td class="input-cell alt"><textarea></textarea></td>
+      <td class="input-cell alt"><textarea></textarea></td>
+      <td class="input-cell alt"><textarea></textarea></td>
+    </tr>
+    <tr>
+      <td class="lbl" style="text-align:center;">Mes 5</td>
+      <td class="input-cell"><textarea></textarea></td>
+      <td class="input-cell"><textarea></textarea></td>
+      <td class="input-cell"><textarea></textarea></td>
+    </tr>
+    <tr>
+      <td class="lbl" style="text-align:center;background:var(--gris-l);">Mes 6</td>
+      <td class="input-cell alt"><textarea></textarea></td>
+      <td class="input-cell alt"><textarea></textarea></td>
+      <td class="input-cell alt"><textarea></textarea></td>
+    </tr>
+    <tr>
+      <td class="lbl" style="text-align:center;font-size:7.5pt;white-space:normal;">Mayor a 6 meses</td>
+      <td class="input-cell" colspan="3" style="padding:4px 8px;">
+        <textarea style="width:100%;min-height:40px;" placeholder="Describir actividades, competencias y resultados esperados para el período mayor a 6 meses..."></textarea>
+      </td>
+    </tr>
+  </table>
+
+  <div class="obj-hdr" style="margin-top:4px;">Descripción de funciones prácticas profesionales:</div>
+  <div class="obj-body"><textarea style="width:100%;min-height:60px;" placeholder="Describir las funciones que desarrollará el practicante durante su práctica profesional..."></textarea></div>
+
+  <div class="obj-hdr" style="margin-top:4px;">Observaciones Monitor / Tutor:</div>
+  <div class="obj-body"><textarea style="width:100%;min-height:50px;" placeholder="Observaciones generales del Monitor y/o Tutor sobre el plan de trabajo..."></textarea></div>
+  </div><!-- /section-card punto 9 -->
+
+  <div class="spacer"></div>
+
+  <!-- ═══ REGISTRO FOTOGRÁFICO ════════════════════════════════════ -->
+  <div class="sec-title"><span class="sec-num">10</span><span class="sec-text">REGISTRO FOTOGRÁFICO DE LA VISITA</span></div>
 
   <div style="border:1px solid var(--gris-m);padding:10px 12px;background:#fff;margin-bottom:4px;">
 
@@ -689,36 +853,41 @@
       <button onclick="quitarFoto()" style="margin-top:4px;font-size:7.5pt;color:#c00;background:none;border:none;cursor:pointer;">✕ Quitar foto</button>
     </div>
 
-  </div>
+    <!-- Autorizaciones -->
+    <div style="background:var(--azul-l);border-radius:3px;padding:8px 12px;">
+      <p style="font-size:8.5pt;font-weight:bold;color:var(--azul);margin-bottom:6px;">
+        Autorización — Tratamiento de datos personales y uso de imagen
+      </p>
+      <p style="font-size:8pt;color:#444;margin-bottom:8px;line-height:1.4;text-align:justify;">
+        De conformidad con la Ley 1581 de 2012 y sus decretos reglamentarios, el practicante autoriza al ITM
+        el tratamiento de sus datos personales y el uso de su imagen fotográfica para los fines académicos e institucionales
+        que se describen a continuación:
+      </p>
+      <label style="display:flex;align-items:flex-start;gap:8px;font-size:8.5pt;margin-bottom:6px;cursor:pointer;">
+        <input type="checkbox" style="width:auto;margin-top:2px;accent-color:var(--azul);">
+        <span><strong>Autorizo el tratamiento de mis datos personales</strong> (nombre, identificación, programa, correo y teléfono)
+        por parte de la Oficina de Prácticas Profesionales ITM para el seguimiento y gestión de mi práctica.</span>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:8px;font-size:8.5pt;cursor:pointer;">
+        <input type="checkbox" style="width:auto;margin-top:2px;accent-color:var(--azul);">
+        <span><strong>Autorizo la publicación de mi imagen fotográfica</strong> (registro de la visita de inicio)
+        en canales institucionales del ITM (página web, redes sociales, boletines académicos) con fines de divulgación
+        de las actividades de práctica profesional.</span>
+      </label>
+    </div>
 
-  <div class="spacer"></div>
-
-  <!-- ═══ 10. AUTORIZACIÓN TRATAMIENTO DE DATOS ═════════════════════ -->
-  <div class="sec-title"><span class="sec-num">10</span><span class="sec-text">AUTORIZACIÓN — TRATAMIENTO DE DATOS PERSONALES Y USO DE IMAGEN</span></div>
-
-  <div style="border:1px solid var(--gris-m);background:var(--azul-l);border-radius:3px;padding:8px 12px;margin-bottom:4px;">
-    <p style="font-size:8pt;color:#444;margin-bottom:8px;line-height:1.4;text-align:justify;">
-      De conformidad con la Ley 1581 de 2012 y sus decretos reglamentarios, el practicante autoriza al ITM
-      el tratamiento de sus datos personales y el uso de su imagen fotográfica para los fines académicos e institucionales
-      que se describen a continuación:
-    </p>
-    <label style="display:flex;align-items:flex-start;gap:8px;font-size:8.5pt;margin-bottom:6px;cursor:pointer;">
-      <input type="checkbox" style="width:auto;margin-top:2px;accent-color:var(--azul);">
-      <span><strong>Autorizo el tratamiento de mis datos personales</strong> (nombre, identificación, programa, correo y teléfono)
-      por parte de la Oficina de Prácticas Profesionales ITM para el seguimiento y gestión de mi práctica.</span>
-    </label>
-    <label style="display:flex;align-items:flex-start;gap:8px;font-size:8.5pt;cursor:pointer;">
-      <input type="checkbox" style="width:auto;margin-top:2px;accent-color:var(--azul);">
-      <span><strong>Autorizo la publicación de mi imagen fotográfica</strong> (registro de la visita de inicio)
-      en canales institucionales del ITM (página web, redes sociales, boletines académicos) con fines de divulgación
-      de las actividades de práctica profesional.</span>
-    </label>
   </div>
 
   <div class="spacer"></div>
 
   <!-- ═══ 11. FIRMAS ══════════════════════════════════════════════ -->
   <div class="sec-title"><span class="sec-num">11</span><span class="sec-text">FIRMAS Y VALIDACIÓN TRIPARTITA</span></div>
+
+  <!-- Fecha única de diligenciamiento -->
+  <div style="border:1px solid var(--gris-m);background:#fff;padding:5px 10px;display:flex;align-items:center;gap:10px;margin-bottom:3px;">
+    <span style="font-weight:bold;font-size:8.5pt;color:var(--azul);white-space:nowrap;">Fecha de diligenciamiento:</span>
+    <input type="date" id="fecha-dilig" style="border:none;border-bottom:1px solid var(--gris-m);font-size:9pt;outline:none;background:transparent;color:var(--negro);cursor:pointer;">
+  </div>
 
   <table style="table-layout:fixed;">
     <colgroup><col style="width:33.3%"><col style="width:33.3%"><col></colgroup>
@@ -760,14 +929,8 @@
       </td>
     </tr>
     <tr>
-      <td class="lbl">Fecha de diligenciamiento:</td>
-      <td class="input-cell" colspan="2" style="padding:4px 8px;background:#fff;">
-        <input type="date" id="fecha-dilig" style="border:none;border-bottom:1px solid var(--gris-m);font-size:9pt;outline:none;background:transparent;color:var(--negro);cursor:pointer;width:200px;">
-      </td>
-    </tr>
-    <tr>
-      <td class="lbl">Modalidad de la visita:</td>
-      <td class="input-cell" colspan="2" style="padding:5px 8px;font-size:8.5pt;background:#fff;">
+      <td class="input-cell" colspan="3" style="padding:5px 8px;font-size:8.5pt;background:#fff;">
+        Visita realizada en modalidad:&nbsp;
         <label class="chk"><input type="checkbox"> Presencial</label>
         <label class="chk"><input type="checkbox"> Virtual</label>
       </td>
@@ -776,16 +939,33 @@
 
   <!-- ─── REFERENCIA NORMATIVA (pie) ──────────────────────────── -->
   <div class="ref-norm">
-    <strong>Referencia normativa:</strong> Manual de Prácticas Profesionales ITM · Decreto 0223 del 5 de marzo de 2026 (Min. Trabajo) ·
+    <strong>Referencia normativa:</strong> Política de Prácticas Profesionales ITM · Decreto 0223 del 5 de marzo de 2026 (Min. Trabajo) ·
     Ley 1780/2016 · Ley 2466/2025 (Reforma Laboral) · Ley 2365/2024 (Prevención acoso sexual) ·
     Ley 2039/2020 (Experiencia profesional) · Art. 81 Código Sustantivo del Trabajo
   </div>
 
+
+
 </div><!-- /page -->
+
+  <button class="btn-enviar" onclick="enviarDatosOficina()">📤 Enviar datos a la Oficina</button>
 
 <button class="btn-pdf" onclick="window.print()">⬇&nbsp; Descargar / Imprimir PDF</button>
 
+
 <script>
+function toggleLugarOtro() {
+  var sel = document.getElementById('sel-lugar-practica');
+  var inp = document.getElementById('inp-lugar-otro');
+  if (sel.value === 'Otro') {
+    inp.style.display = 'block';
+    inp.focus();
+  } else {
+    inp.style.display = 'none';
+    inp.value = '';
+  }
+}
+
 function sincronizarFirmas() {
   const pract   = document.getElementById('inp-nombre-pract');
   const tutor   = document.getElementById('inp-nombre-tutor');
@@ -844,50 +1024,44 @@ function quitarFoto() {
 
 const programasPorFacultad = {
   "Facultad de Artes y Humanidades": [
-    "Tecnología en Diseño Industrial",
-    "Ingeniería en Diseño Industrial",
-    "Tecnología en Informática Musical",
     "Artes Visuales",
     "Cine",
     "Artes de la Grabación y Producción Musical",
-    "Interpretación y Traducción Lengua de Señas Colombiana – español"
+    "Tecnología en Informática Musical",
+    "Tecnología en Diseño Industrial",
+    "Ingeniería en Diseño Industrial"
   ],
   "Facultad de Ciencias Económicas y Administrativas": [
-    "Tecnología en Sistemas de Producción",
-    "Tecnología en Gestión Comercial Virtual Dual",
-    "Tecnología en Gestión Administrativa - Presencial/Virtual",
-    "Tecnología en Control de la Calidad",
-    "Tecnología en Análisis de Costos y Presupuestos - Presencial/Virtual",
-    "Marketing",
-    "Ingeniería Financiera",
-    "Ingeniería de Producción",
-    "Ingeniería de la Calidad",
-    "Contaduría Pública",
+    "Tecnología en Gestión Administrativa",
+    "Tecnología en Análisis de Costos y Presupuestos",
+    "Tecnología en Calidad",
+    "Tecnología en Producción",
     "Administración Tecnológica",
-    "Administración del Deporte"
+    "Administración del Deporte",
+    "Ingeniería Financiera y de Negocios",
+    "Ingeniería de Producción",
+    "Ingeniería de la Calidad"
   ],
   "Facultad de Ciencias Exactas y Aplicadas": [
     "Tecnología en Mantenimiento de Equipo Biomédico",
     "Tecnología en Construcción de Acabados Arquitectónicos",
-    "Química Industrial",
     "Ingeniería Biomédica",
-    "Física",
     "Ciencias Ambientales",
-    "Ciencia y Tecnología de los Alimentos"
+    "Ciencia y Tecnología de los Alimentos",
+    "Física",
+    "Química Industrial"
   ],
   "Facultad de Ingenierías": [
+    "Tecnología en Sistemas de Información",
+    "Tecnología en Telecomunicaciones",
+    "Tecnología en Electrónica",
     "Tecnología en Sistemas Electromecánicos",
-    "Tecnología en Gestión de Redes de Telecomunicaciones",
-    "Tecnología en Diseño y Programación de Software como Servicio (SaaS)",
-    "Tecnología en Desarrollo de Software",
-    "Tecnología en Desarrollo de Aplicaciones para Dispositivos Móviles-Virtua",
-    "Tecnología en Automatización Electrónica",
-    "Ingeniería Mecatrónica",
+    "Tecnología en Sistemas de Producción",
+    "Ingeniería de Sistemas",
+    "Ingeniería de Telecomunicaciones",
     "Ingeniería Electrónica",
     "Ingeniería Electromecánica",
-    "Ingeniería de Telecomunicaciones",
-    "Ingeniería de Sistemas",
-    "Ingeniería de Ciencia de Datos"
+    "Interpretación y Traducción Lengua de Señas – Español"
   ]
 };
 
@@ -909,6 +1083,149 @@ function filtrarProgramas() {
   });
 }
 
+function llenarDatosPrueba_DISABLED() {
+  // ── Helpers ─────────────────────────────────────────────────────
+  function val(id, v)  { const el = document.getElementById(id); if (el) el.value = v; }
+  function sel(id, v)  { const el = document.getElementById(id); if (el) el.value = v; }
+  function txt(idx, v) { const els = document.querySelectorAll('textarea'); if (els[idx]) { els[idx].value = v; autoHeight(els[idx]); } }
+  function inp(idx, v) { const els = document.querySelectorAll('input[type="text"]:not(.firma-inp):not([readonly])'); if (els[idx]) els[idx].value = v; }
+  function chkGroup(groupIdx, optionIdx) {
+    // groupIdx = posición del grupo de checkboxes (label.chk) dentro del formulario
+    const grupos = {};
+    let gi = -1, prev = null;
+    document.querySelectorAll('label.chk input[type="checkbox"]').forEach(cb => {
+      const p = cb.closest('td,div');
+      if (p !== prev) { gi++; prev = p; grupos[gi] = grupos[gi] || []; }
+      grupos[gi].push(cb);
+    });
+    if (grupos[groupIdx]) {
+      grupos[groupIdx].forEach(cb => cb.checked = false);
+      if (grupos[groupIdx][optionIdx]) grupos[groupIdx][optionIdx].checked = true;
+    }
+  }
+  function autoHeight(ta) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+
+  // ── Sección 2: Practicante ───────────────────────────────────────
+  val('inp-nombre-pract', 'Laura Valentina Ríos Cardona');
+  inp(1, '1037894562');              // Número de identificación
+  inp(2, 'lvrios@itm.edu.co');       // Correo institucional
+  inp(3, '3147820934');              // Teléfono
+
+  // Facultad → Programa (cascada)
+  const selFac = document.getElementById('sel-facultad');
+  selFac.value = 'Facultad de Ingenierías';
+  filtrarProgramas();
+  setTimeout(() => {
+    const selProg = document.getElementById('sel-programa');
+    selProg.value = 'Ingeniería de Sistemas';
+  }, 50);
+
+  // Semestre (tercer select sin ID)
+  const semSelect = document.querySelectorAll('select')[2];
+  if (semSelect) semSelect.value = '8° Semestre';
+
+  // Monitor
+  sel('inp-nombre-monitor', 'Maritza Medina Giraldo');
+
+  // Fechas
+  val('fecha-inicio', '2026-02-02');
+  document.getElementById('fecha-inicio').dispatchEvent(new Event('change'));
+  setTimeout(() => { val('fecha-fin', '2026-08-14'); }, 60);
+
+  // Modalidad de práctica → Práctica Profesional (chk grupo 0)
+  chkGroup(0, 0);
+
+  // ── Sección 3: Escenario ─────────────────────────────────────────
+  inp(4, 'Sistemas Digitales S.A.S.');       // Razón social
+  inp(5, '900.312.748-5');                    // NIT
+
+  // Tipo de escenario (select por posición 3)
+  const selTipo = document.querySelectorAll('select')[3];
+  if (selTipo) selTipo.value = 'Empresa patrocinadora (Contrato aprendizaje)';
+
+  // Sector económico (select por posición 4)
+  const selSec = document.querySelectorAll('select')[4];
+  if (selSec) selSec.value = 'Tecnologías de la Información y Software (TI)';
+
+  inp(6, 'Carrera 43A # 18-111, Medellín');   // Dirección
+  val('inp-nombre-tutor', 'Carlos Andrés Mejía Ospina');
+  inp(8, 'Líder de Proyectos TI');             // Cargo tutor
+  inp(9, 'camejia@sistemasdigitales.com');     // Correo tutor
+  inp(10, '6044521100');                       // Teléfono tutor
+  inp(11, 'Gerencia de Desarrollo de Software');// Área/Dependencia
+
+  // Modalidad de trabajo → Híbrida (grupo 1, opción 1)
+  chkGroup(1, 1);
+
+  // ── Sección 4: Verificación de documentos (9 grupos Sí/No/NA) ───
+  // Contrato → Sí; ARL → Sí; EPS → Sí; Pensión → Sí; Carta OPP → Sí
+  // Reglamento → Sí; Aprobación funciones → Sí; Acta inicio → Sí; Inspector → N/A
+  [2,3,4,5,6,7,8,9,10].forEach((g, i) => { chkGroup(g, i < 8 ? 0 : 2); });
+
+  // ── Sección 5: Condiciones del escenario (10 grupos Cumple/No cumple)
+  [11,12,13,14,15,16,17,18,19,20].forEach(g => chkGroup(g, 0));
+
+  // ── Sección 6: Objetivos ─────────────────────────────────────────
+  const objInputs = document.querySelectorAll('.obj-body input[type="text"]');
+  if (objInputs[0]) objInputs[0].value = 'Aplicar conocimientos de ingeniería de software en el desarrollo de módulos del sistema ERP de la empresa.';
+  if (objInputs[1]) objInputs[1].value = 'Fortalecer habilidades en metodologías ágiles (Scrum) participando activamente en los sprints del equipo.';
+  if (objInputs[2]) objInputs[2].value = 'Documentar los procesos técnicos implementados y generar reportes de avance mensual al tutor y al monitor.';
+
+  // Plan de trabajo (textareas 0–11: actividades y resultados × 6 meses)
+  const activ = [
+    'Inducción al entorno de trabajo, revisión de arquitectura del sistema y configuración del ambiente de desarrollo.',
+    'Diseño y desarrollo del módulo de gestión de inventarios: entidades, repositorios y servicios REST.',
+    'Integración del módulo de inventarios con la capa de presentación (React) y pruebas unitarias.',
+    'Desarrollo del módulo de reportes financieros con generación de PDF y exportación a Excel.',
+    'Optimización de consultas SQL, ajustes de rendimiento y corrección de hallazgos en pruebas UAT.',
+    'Documentación técnica final, entrega del código fuente, presentación ante el equipo y cierre de práctica.'
+  ];
+  const result = [
+    'Ambiente configurado; comprensión del stack tecnológico y flujo de trabajo del equipo.',
+    'Módulo de inventarios funcional con CRUD completo y pruebas de integración al 80%.',
+    'Interfaz de inventarios operativa e integrada; cobertura de pruebas unitarias ≥ 75%.',
+    'Reportes financieros disponibles en producción, validados por el área contable.',
+    'Sistema estable con tiempos de respuesta < 300 ms; cero errores críticos en UAT.',
+    'Documentación técnica entregada; código aceptado por el líder del proyecto.'
+  ];
+
+  // Mapear los primeros 12 textareas a los 6 meses (2 por mes)
+  const tas = document.querySelectorAll('textarea');
+  for (let m = 0; m < 6; m++) {
+    if (tas[m*2])   { tas[m*2].value = activ[m];   autoHeight(tas[m*2]); }
+    if (tas[m*2+1]) { tas[m*2+1].value = result[m]; autoHeight(tas[m*2+1]); }
+  }
+  // Checkboxes tipo de producto (grupos 21–26, alternando Entregable e Informe)
+  [21,22,23,24,25,26].forEach((g, i) => chkGroup(g, i % 2));
+
+  // Mayor a 6 meses y observaciones plan
+  if (tas[12]) { tas[12].value = 'En caso de extensión, continuar con el módulo de nómina y auditoría de accesos del sistema.'; autoHeight(tas[12]); }
+  if (tas[13]) { tas[13].value = 'El plan de trabajo fue revisado y validado en la visita de inicio. Se recomienda al practicante llevar bitácora semanal de actividades.'; autoHeight(tas[13]); }
+
+  // ── Sección 7: Horario ───────────────────────────────────────────
+  const numHoras = document.querySelector('input[type="number"]');
+  if (numHoras) numHoras.value = 40;
+  chkGroup(27, 0); // Compatible con académicas → Sí
+  if (tas[14]) { tas[14].value = 'Lunes a viernes de 8:00 a.m. a 12:00 m. y de 2:00 p.m. a 6:00 p.m. Modalidad híbrida: martes y jueves teletrabajo. No se labora festivos.'; autoHeight(tas[14]); }
+
+  // ── Sección 8: Compromisos ───────────────────────────────────────
+  if (tas[15]) { tas[15].value = 'Asistir puntualmente según el horario acordado. Informar oportunamente cualquier novedad o ausencia. Entregar los productos en los plazos establecidos. Mantener conducta ética y respetuosa. Cumplir con el reglamento interno de la empresa y las políticas ITM.'; autoHeight(tas[15]); }
+  if (tas[16]) { tas[16].value = 'Asignar un espacio de trabajo adecuado. Brindar la inducción al practicante. Supervisar y evaluar el desempeño mensualmente. Reportar al monitor cualquier novedad que afecte el desarrollo de la práctica.'; autoHeight(tas[16]); }
+  if (tas[17]) { tas[17].value = 'Realizar visita de inicio, seguimiento y cierre. Verificar el cumplimiento de objetivos formativos. Mediar en situaciones de conflicto y garantizar el carácter pedagógico de la práctica.'; autoHeight(tas[17]); }
+  if (tas[18]) { tas[18].value = 'Ninguna observación adicional al momento de la visita de inicio. Se desarrolló la reunión en modalidad presencial en las instalaciones de la empresa.'; autoHeight(tas[18]); }
+
+  // ── Fecha de diligenciamiento ────────────────────────────────────
+  val('fecha-dilig', '2026-02-07');
+
+  // ── Sección 11: Modalidad de la visita → Presencial ─────────────
+  chkGroup(28, 0);
+
+  // ── Actualizar firmas ────────────────────────────────────────────
+  sincronizarFirmas();
+
+  alert('✅ Datos de prueba cargados correctamente.\nRevisa el formulario y descárgalo como PDF cuando esté listo.');
+}
+
 document.querySelectorAll('textarea').forEach(function(t) {
   function grow() { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; }
   t.addEventListener('input', grow); grow();
@@ -920,7 +1237,110 @@ document.querySelectorAll('table').forEach(function(t) {
   w.className = 'tw';
   t.parentNode.insertBefore(w, t);
   w.appendChild(t);
-});
+}
+
+
+
+);
+
+
+function enviarDatosOficina() {
+  // 1. Recolectar los datos con la ESTRUCTURA EXACTA del esquema de Power Automate
+  const datosFormulario = {
+    "practicante": {
+      "nombre": document.getElementById('inp-nombre-pract') ? document.getElementById('inp-nombre-pract').value : "",
+      "documento": document.getElementById('inp-documento') ? document.getElementById('inp-documento').value : "",
+      "correo": document.getElementById('inp-correo') ? document.getElementById('inp-correo').value : "",
+      "telefono": document.getElementById('inp-telefono') ? document.getElementById('inp-telefono').value : "",
+      "facultad": document.getElementById('sel-facultad') ? document.getElementById('sel-facultad').value : "",
+      "programa": document.getElementById('sel-programa') ? document.getElementById('sel-programa').value : "",
+      "monitor": document.getElementById('inp-nombre-monitor') ? document.getElementById('inp-nombre-monitor').value : "",
+      "fecha_inicio": document.getElementById('fecha-inicio') ? document.getElementById('fecha-inicio').value : "",
+      "fecha_fin": document.getElementById('fecha-fin') ? document.getElementById('fecha-fin').value : "",
+      "modalidad_practica": ""
+    },
+    "escenario_practica": {
+      "razon_social": "",
+      "nit": "",
+      "tipo_escenario": "",
+      "sector_economico": "",
+      "direccion_ciudad": "",
+      "tutor_nombre": document.getElementById('inp-nombre-tutor') ? document.getElementById('inp-nombre-tutor').value : "",
+      "tutor_cargo": "",
+      "tutor_correo": "",
+      "tutor_telefono": "",
+      "area_funciones": ""
+    },
+    "verificacion_documentos": {
+      "contrato": "", "arl": "", "eps": "", "fondo_pension": "", "carta_inicio": "", "reglamento_interno": "", "autorizacion_menor": ""
+    },
+    "condiciones_escenario": {
+      "espacio_adecuado": "", "induccion": "", "conoce_reglamento": "", "horario_permitido": "", "asistencia_academica": "",
+      "funciones_acordes": "", "protocolo_acoso": "", "politica_acoso_laboral": "", "experiencia_tutor": "", "canales_atencion": ""
+    },
+    "horario": {
+      "horas_semanales": 0, 
+      "compatible_academica": "", 
+      "modalidad_trabajo": "", 
+      "horario_trabajo": "",
+      "dias_laborales": "", 
+      "lugar_desarrollo": "", 
+      "sede": "", 
+      "ciudad": "", 
+      "elementos_suministrados": [], 
+      "observaciones_horario": ""
+    },
+    "plan_practicas": {
+      "observaciones_generales_visita": "", 
+      "objetivos_formativos": "",
+      "meses": [],
+      "descripcion_funciones": "", 
+      "observaciones_tutor_monitor": ""
+    },
+    "firmas": {
+      "fecha_diligenciamiento": document.getElementById('fecha-dilig') ? document.getElementById('fecha-dilig').value : "",
+      "modalidad_visita": ""
+    }
+  };
+
+  // 2. URL del webhook de Power Automate
+  const urlPowerAutomate = "https://default069ff609ffcd494196eaf58efbb15a.37.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/24/workflows/8678707290994407a354870c0ea2e083/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=6zFQRYOCoBSL2U7vEcyLNlC1saDY8_Wze4YRM1NbLnw";
+
+  // Cambiar texto del botón mientras envía
+  const btn = document.querySelector('.btn-enviar');
+  const textoOriginal = btn.innerHTML;
+  btn.innerHTML = "⏳ Enviando...";
+  btn.disabled = true;
+
+  // 3. Enviar la petición HTTP POST
+ // 3. Enviar la petición HTTP POST y leer el error exacto
+  fetch(urlPowerAutomate, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(datosFormulario)
+  })
+  .then(async response => {
+    if (response.ok || response.status === 202) {
+      alert('✅ Datos enviados exitosamente a la oficina.');
+    } else {
+      // Aquí capturamos el motivo exacto del rechazo
+      const detalleError = await response.text(); 
+      alert('❌ Error ' + response.status + '\nPower Automate dice: ' + detalleError);
+      console.error('Motivo del error 400:', detalleError);
+    }
+  })
+  .catch(error => {
+    console.error('Error en la petición:', error);
+    alert('❌ Error de conexión al intentar enviar los datos.');
+  })
+  .finally(() => {
+    // Restaurar el botón
+    btn.innerHTML = textoOriginal;
+    btn.disabled = false;
+  });
+}
 </script>
 </body>
 </html>
